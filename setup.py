@@ -1,13 +1,17 @@
+import io
 from setuptools import setup
+
 
 setup(
     name='itree',
-    version='0.0.1',
+    version='0.0.3dev',
     url='',
     license='MIT',
     author='Bob Zimmermann',
     author_email='robert.zimmermann@univie.ac.at',
     description='An interval tree data structure',
+    long_description=io.open('README.md').read(),
+    long_description_content_type='text/markdown',
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

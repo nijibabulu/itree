@@ -1,11 +1,11 @@
 # itree
 
-`itree` is an interval tree data structure based on a self-balancing AVL binary search tree tree. 
+`itree` is an interval tree data structure based on a self-balancing AVL binary search tree. 
 Suitable for use with sequence features in bioinformatics.
 
 ## Getting Started
 
-* Construction
+* **Construction**
 
 Creating an interval tree object:
 
@@ -14,7 +14,7 @@ Creating an interval tree object:
 >>> t = itree.ITree()
 ```
 
-* Insertion
+* **Insertion**
 
 Any item inserted into an interval tree must contain "start" and "end" attributes as integers. 
 
@@ -26,11 +26,9 @@ Any item inserted into an interval tree must contain "start" and "end" attribute
 >>> t.insert(i(4,20))
 >>> t.insert(i(5,15))
 >>> t.insert(i(6,7))
->>> t.insert(i(10,20))
->>> t.insert(i(15,25))
 ```
 
-* Search
+* **Search**
 
 Search for all intervals overlapping a given interval
 
@@ -39,7 +37,7 @@ Search for all intervals overlapping a given interval
 [MyInterval(start=3, end=20), MyInterval(start=4, end=20), MyInterval(start=1, end=15)]
 ```
 
-* Removal
+* **Removal**
 
 Remove an interval exactly matching the given interval by its `start` and `end` attributes (but not necessarily the 
 same object).
