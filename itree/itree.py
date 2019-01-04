@@ -89,8 +89,33 @@ class ITreeNode(object):
         self.c[1] = n
 
     def __repr__(self):
-        return f"ITreeNode(start={self.start},end={self.end})"#,max={self.max}," \
-            #f"height={self.height})"
+        return self.pstring()
+        # return f"ITreeNode({self.start},{self.end})"  # ,max={self.max}," \
+        # f"height={self.height})"
+
+    def pstring(self, name=False, attr_names=False, minmax=False, height=False):
+        """pretty string of the node
+
+        :param name: show the name of the class (i.e. ITreeNode)
+        :param attr_names: show the names of the attrs (e.g. start=S,end=E)
+        :param minmax: show the min and max of the name
+        :param height: show the height of the node
+        :return: a string
+        """
+
+        s = ""
+        if name:
+            s += "ITreeNode"
+        s += "("
+        attrs = ["start", "end"] + \
+                (["min", "max"] if minmax else []) + \
+                (["height"] if height else [])
+        s += ','.join(
+            f"{(attr + '=') if attr_names else ''}{getattr(self,attr)}"
+            for attr in attrs)
+        s += ")"
+
+        return s
 
 
 class ITree(object):
@@ -113,12 +138,38 @@ class ITree(object):
         return self._child_count(self.root)
 
     def __repr__(self):
-        return self._in_order(self.root)
+        return f"ITree(root={self.root})"
 
-    def _in_order(self, n):
+    def pstring(self, name=False, attr_names=False, minmax=False, height=False):
+        """pretty string of the tree
+
+        Display the binary tree in order including additional information if
+        requested.
+
+        :param name: show the name of the class (i.e. ITreeNode)
+        :param attr_names: show the names of the attrs (e.g. start=S,end=E)
+        :param minmax: show the min and max of the name
+        :param height: show the height of the node
+        :return: a string"""
+        return self._in_order(self.root, name=name, attr_names=attr_names,
+                              minmax=minmax, height=height)
+
+    def _in_order(self, n, right_parent=False, level=0, **kwargs):
+
         if n is None:
-            return "-"
-        return f"({self._in_order(n.left)},{n},{self._in_order(n.right)})"
+            return ""
+        if level:
+            corner = '└' if right_parent else '┌'
+        else:
+            corner = ''
+
+        node_string = n.pstring(**kwargs)
+        left_subtree_string = self._in_order(
+            n.left, right_parent=False, level=level + len(node_string), **kwargs)
+        right_subtree_string = self._in_order(
+            n.right, right_parent=True, level=level + len(node_string), **kwargs)
+
+        return f"{left_subtree_string}{(' '*level)+corner}–{node_string}\n{right_subtree_string}"
 
     def _child_count(self, n):
         if n is None:
@@ -218,7 +269,7 @@ class ITree(object):
         else:
             return n
 
-    def _balance(self, n: ITreeNode, update_node_height: bool=False):
+    def _balance(self, n: ITreeNode, update_node_height: bool = False):
         left_height = self._height(n.left)
         right_height = self._height(n.right)
         if update_node_height:
