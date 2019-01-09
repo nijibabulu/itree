@@ -12,4 +12,4 @@ def use_legacy_itree():
     ITreeNode = legacy_itree.ITreeNode
 
 
-__version__ = '0.0.3dev'
+__version__ = '0.0.3.dev0'

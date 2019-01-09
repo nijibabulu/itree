@@ -3,6 +3,30 @@
 `itree` is an interval tree data structure based on a self-balancing AVL binary search tree. 
 Suitable for use with sequence features in bioinformatics.
 
+## Why `itree`?
+
+* **`itree` is fast**
+
+`itree` implements an augmented search tree optmized for searching sets of intervals. The following benchmarks the performance of inserting, removing and searching for random intervals taken from the human chromosome 12 Gencode genes:
+
+![benchmark](benchmarking/benchmarking.png)
+
+* **`itree` is convenient**
+
+`itree` has a second-level interface for groups of objects (e.g. chromosomes):
+
+```python
+>>> import itree, collections
+>>> bed_records = [tuple(l.split()[:3]) for l in open('gencode.bed')] 
+>>> i = collections.namedtuple('MyInterval', ['chrom','start','end'])
+>>> t = itree.GroupedITree('chrom', [i(f[0], int(f[1]), int(f[2])) for f in bed_records])
+>>> t.search(i('chr15', 45167200, 45167300)) 
+[MyInterval(chrom='chr15', start=45167213, end=45187956),
+ MyInterval(chrom='chr15', start=45167250, end=45187952),
+ MyInterval(chrom='chr15', start=45167213, end=45201175),
+ MyInterval(chrom='chr15', start=45152663, end=45167526)]
+```
+
 ## Getting Started
 
 * **Construction**
@@ -59,3 +83,29 @@ same object).
 ``` 
 
 The `pstring` method is mostly for debugging, but here we illustrate the rebalancing of the tree.
+
+* **Grouping**
+
+A second-level `itree` object, `GroupedITree`, works as a proxy to `itree` objects which can be grouped by any hashable attribute or function:
+
+```python
+>>> import itree, collections
+>>> i = collections.namedtuple('Appointment', ['day','start','end'])
+>>> appts = [i('Monday', 9, 13), i('Monday', 16, 17), i('Tuesday', 14, 15)]
+>>> t = itree.GroupedITree(key='day', intervals=appts)
+>>> t.search(i('Monday', 11, 12))
+[Appointment(day='Monday', start=9, end=13)]
+>>> t.search(i('Monday', 14, 15))
+[]
+```
+
+You may also use any arbitrary hashable value returned from a function as a key:
+
+```python
+>>> i = collections.namedtuple('Appointment', ['day','month','start','end'])
+>>> date_key = lambda appt: "{} {}".format(appt.day, appt.month)
+>>> appts = [i(5, 'Jan', 9, 13), i(6, 'Jan', 16, 17), i(5, 'Feb', 14, 15)]
+>>> t = itree.GroupedITree(key=date_key, intervals=appts)
+>>> t.search(i(5, 'Jan', 16, 17))   
+[]
+```

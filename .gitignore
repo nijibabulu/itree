@@ -1,6 +1,9 @@
 # Idea files
 .idea/
 
+# backups from conversions
+*.bak
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
