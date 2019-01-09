@@ -7,9 +7,9 @@ Suitable for use with sequence features in bioinformatics.
 
 * **`itree` is fast**
 
-`itree` implements an augmented search tree optmized for searching sets of intervals. The following benchmarks the performance of inserting, removing and searching for random intervals taken from the human chromosome 12 Gencode genes:
+`itree` implements an augmented search tree optmized for searching sets of intervals. The following[[1]](#notes) benchmarks the performance of inserting, removing and searching for random intervals taken from the human chromosome 12 Gencode genes:
 
-![benchmark](benchmarking/benchmarking.png)
+<img src="benchmarking/benchmarking.png" alt="benchmarking" width="500" />
 
 * **`itree` is convenient**
 
@@ -109,3 +109,6 @@ You may also use any arbitrary hashable value returned from a function as a key:
 >>> t.search(i(5, 'Jan', 16, 17))   
 []
 ```
+
+## Notes
+[1]. generated with `python3 scripts/benchmarking.py scripts/gencode.chr12.bed 500 10000 500 > benchmarking.txt`.
