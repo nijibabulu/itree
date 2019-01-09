@@ -13,7 +13,6 @@ typing-extensions = "*"
 click = "*"
 pytest-cov = "*"
 coveralls = "*"
-pyyaml = "*"
 
 [requires]
 python_version = "3.7"

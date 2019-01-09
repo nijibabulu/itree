@@ -4,3 +4,4 @@ init:
 
 test:
 	pipenv run py.test tests
+	pipenv run py.test --cov=itree tests
