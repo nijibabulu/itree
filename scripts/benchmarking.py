@@ -314,7 +314,7 @@ def main(seed, bed_file, search_frac, remove_frac, min_tree_size, max_tree_size,
     with open(bed_file) as f:
         ivs = [tuple(int(x) for x in l.split()[1:3]) for l in f]
 
-    for s in range(min_tree_size, max_tree_size, step_size):
+    for s in range(min_tree_size, max_tree_size+1, step_size):
         insert_ivs = random.sample(ivs, s)
         search_ivs = random.sample(insert_ivs, int(s * search_frac))
         remove_ivs = random.sample(insert_ivs, int(s * remove_frac))
