@@ -8,6 +8,9 @@ name = "pypi"
 [dev-packages]
 pytest = "*"
 attr = "*"
+itree = {editable = true, path = "."}
+typing-extensions = "*"
+click = "*"
 
 [requires]
 python_version = "3.7"
