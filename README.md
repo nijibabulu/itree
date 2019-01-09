@@ -9,7 +9,7 @@ Suitable for use with sequence features in bioinformatics.
 
 `itree` implements an augmented search tree optmized for searching sets of intervals. The following benchmarks the performance of inserting, removing and searching for random intervals taken from the human chromosome 12 Gencode genes[[1]](#notes):
 
-<img src="benchmarking/benchmarking.png" alt="benchmarking" width="500" />
+<img src="https://raw.githubusercontent.com/nijibabulu/itree/master/benchmarking/benchmarking.png" alt="benchmarking" width="500" />
 
 * **`itree` is convenient**
 
