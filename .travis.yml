@@ -4,3 +4,6 @@ python: 3.6
 sudo: false
 
 install: "make"
+
+script:
+  - make test
