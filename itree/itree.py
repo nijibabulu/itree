@@ -370,14 +370,15 @@ class ITree(object):
 
 
 class GroupedITree(object):
-    def __init__(self, key, nodes=None):
+    def __init__(self, key, intervals=None):
         """A collection of ITree objects partitioned by a key value
 
         :param key: either a string indicating the name of the attribute
             or a function to group the objects by
-        :param nodes: an optional list of objects to initialize the ITrees with
+        :param intervals: an optional list of objects to initialize the ITrees with
         """
 
+        self._key_obj = key
         if isinstance(key, str):
             self.key = lambda g: getattr(g, key)
         elif callable(key):
@@ -390,12 +391,15 @@ class GroupedITree(object):
             raise TypeError("key must be a string or a callable.")
 
         self.trees = {}
-        if nodes is not None:
+        if intervals is not None:
             self.trees = {
                 k: ITree(nodes=list(grp))
                 for k, grp in itertools.groupby(
-                sorted(nodes, key=self.key), key=self.key)
+                    sorted(intervals, key=self.key), key=self.key)
             }
+
+    def __repr__(self):
+        return f"GroupedITree(key={self._key_obj}, trees={self.trees})"
 
     def insert(self, i):
         self.trees.setdefault(self.key(i), ITree()).insert(i)
@@ -406,3 +410,8 @@ class GroupedITree(object):
             return []
         else:
             return self.trees[k].search(i)
+
+    def remove(self, i):
+        k = self.key(i)
+        if k in self.trees:
+            self.trees[k].remove(i)
