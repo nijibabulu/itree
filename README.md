@@ -115,4 +115,4 @@ You may also use any arbitrary hashable value returned from a function as a key:
 ```
 
 ## Notes
-[1]. generated with `python3 scripts/benchmarking.py scripts/gencode.chr12.bed 500 10000 500 > benchmarking.txt`.
+[1]. generated with `python3 benchmarking/benchmarking.py benchmarking/gencode.chr12.bed 500 10000 500 > benchmarking.txt`.
