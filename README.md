@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/nijibabulu/itree.svg?branch=master)](https://travis-ci.com/nijibabulu/itree)
+
 # itree
 
 `itree` is an interval tree data structure based on a self-balancing AVL binary search tree. 
