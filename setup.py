@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='itree',
-    version='0.0.4.dev0',
+    version='0.0.5',
     url='',
     license='MIT',
     author='Bob Zimmermann',
