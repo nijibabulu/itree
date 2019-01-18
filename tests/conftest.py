@@ -1,3 +1,4 @@
+import os
 import random
 
 import pytest
@@ -51,6 +52,7 @@ samp = [(1, 1040), (1, 1883), (1, 835), (517, 18575), (517, 36465),
 class _FakeNode(object):
     start: int = attr.ib()
     end: int = attr.ib()
+    annotation: str = attr.ib(default='')
 
 
 @pytest.fixture
@@ -89,19 +91,46 @@ def itree_random_queries():
     return random_intervals(n=100, max=20000, width=1000)
 
 
+_data_dir = os.path.join(os.path.dirname(__file__), 'files')
+
+
+@pytest.fixture
+def data_dir():
+    return _data_dir
+
+
+def fake_bed_nodes(bed_file):
+    nodes = []
+    with open(bed_file) as f:
+        for line in f:
+            fields = line.split('\t')
+            start, end = [int(x) for x in fields[1:3]]
+            nodes.append(_FakeNode(start,end,fields[0]))
+    return nodes
+
 @pytest.fixture
 def gene_intervals():
+    return fake_bed_nodes(os.path.join(_data_dir, 'genes.mcl1.bed'))
+
     f = open('genes.mcl1.bed')
     nodes = []
     for line in f:
         start, end = [int(x) for x in line.split('\t')[1:3]]
-        nodes.append(_FakeNode(start, end))
+        nodes.append(_FakeAnnotatedNode(start, end))
     return nodes
+
+
+@pytest.fixture
+def gene_intervals_short():
+    return fake_bed_nodes(os.path.join(_data_dir, 'genes.mcl1.short.bed'))
 
 
 class _FakeITree(object):
     def __init__(self, nodes=None):
         self.nodes = nodes or []
+
+    def __len__(self):
+        return len(self.nodes)
 
     def insert(self, node):
         self.nodes.append(node)
@@ -109,7 +138,38 @@ class _FakeITree(object):
     def search(self, i):
         return [n for n in self.nodes if n.start <= i.end and i.start <= n.end]
 
+    def remove(self, i):
+        self.nodes = [n for n in self.nodes if n != i]
+
 
 @pytest.fixture
 def FakeITree():
     return _FakeITree
+
+
+class _FakeGroupedITree(object):
+    def __init__(self, key, intervals=None):
+        if isinstance(key, str):
+            self.key = lambda node: getattr(node, key)
+        else:
+            self.key = key
+        self.trees = {}
+        if intervals is not None:
+            for node in intervals:
+                self.trees.setdefault(self.key(node), _FakeITree()).insert(node)
+
+    def search(self, node):
+        tree = self.trees.get(self.key(node))
+        if tree is not None:
+            return tree.search(node)
+        else:
+            return None
+
+    def remove(self, node):
+        if self.key(node) in self.trees:
+            self.trees[self.key(node)].remove(node)
+
+
+@pytest.fixture
+def FakeGroupedITree():
+    return _FakeGroupedITree
