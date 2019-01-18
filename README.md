@@ -4,8 +4,15 @@
 
 # itree
 
-`itree` is an interval tree data structure based on a self-balancing AVL binary search tree. 
-Suitable for use with sequence features in bioinformatics.
+`itree` is an interval tree data structure based on a self-balancing AVL binary search tree. Suitable for use with sequence features in bioinformatics.
+
+## Installation
+
+`itree` can be installed using pip:
+
+```
+pip install itree
+```
 
 ## Why `itree`?
 
@@ -114,5 +121,11 @@ You may also use any arbitrary hashable value returned from a function as a key:
 []
 ```
 
+## See also 
+
+* [intervaltree](https://github.com/chaimleib/intervaltree) - An interval tree implementation based on a strict binary search tree. Faster insertion and removal but slower search (see above).
+* [Greeks for geeks explanation of interval trees](https://www.geeksforgeeks.org/interval-tree/).
+* [Advanced data structures](https://www.cambridge.org/core/books/advanced-data-structures/D56E2269D7CEE969A3B8105AD5B9254C) - Describes several interval types, including the one min-max interval subset search tree described in section 2.2, which most closely resembles this data structure.
+
 ## Notes
-[1]. generated with `python3 scripts/benchmarking.py scripts/gencode.chr12.bed 500 10000 500 > benchmarking.txt`.
+[1] generated with `python3 benchmarking/benchmarking.py benchmarking/gencode.chr12.bed 500 10000 500 > benchmarking.txt`.
