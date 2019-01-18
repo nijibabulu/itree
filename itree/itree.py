@@ -283,12 +283,10 @@ class ITree(object):
 
         The object must be present in the tree (identical start and stop).
         """
-        balanced = []
-        self.root = self._remove(self.root, None, False, balanced, ITreeNode(i))
+        self.root = self._remove(self.root, None, False, ITreeNode(i))
 
     def _remove(self, n: ITreeNode, p: Optional[ITreeNode],
-                right_parent: bool, balanced: List[int],
-                nn: ITreeNode) -> Optional[ITreeNode]:
+                right_parent: bool, nn: ITreeNode) -> Optional[ITreeNode]:
         """Removal helper function """
 
         # BST removal consists of 3 cases:
@@ -307,7 +305,7 @@ class ITree(object):
             if n.left is not None and n.right is not None:
                 min_right_child = self._min_child(n.right)
                 n.interval = min_right_child.interval
-                n.right = self._remove(n.right, n, True, balanced, min_right_child)
+                n.right = self._remove(n.right, n, True, min_right_child)
             else:
                 # less than two children, we bridge the parent to the child
                 n = n.left or n.right
@@ -317,17 +315,14 @@ class ITree(object):
                     return None
         else:
             if n.left and nn.start <= n.left.max and n.left.min <= nn.end:
-                n.left = self._remove(n.left, n, False, balanced,  nn)
+                n.left = self._remove(n.left, n, False, nn)
             if n.right and nn.start <= n.right.max and n.right.min <= nn.end:
-                n.right = self._remove(n.right, n, True, balanced, nn)
+                n.right = self._remove(n.right, n, True, nn)
 
         n.min = min(self._min(n.left), self._min(n.right), n.start)
         n.max = max(self._max(n.left), self._max(n.right), n.end)
 
-        if balanced:
-            return n
-        else:
-            return self._rebalance(n)
+        return self._rebalance(n)
 
     def _min_child(self, n: ITreeNode):
         if n.left is None:
