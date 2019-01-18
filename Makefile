@@ -24,4 +24,3 @@ twine-upload: sdist
 	twine upload dist/*
 
 .PHONY: init test sdist twine-test-upload twine-upload clean build-clean dist-clean
-
