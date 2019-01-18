@@ -291,10 +291,6 @@ class ITree(object):
                 nn: ITreeNode) -> Optional[ITreeNode]:
         """Removal helper function """
 
-        if n is None:
-            # not found
-            balanced.append(1) # dont need to rebalance
-            return None
         # BST removal consists of 3 cases:
         # 1 if the node has 2 children, the node is replaced with the value
         #   of its smallest right child (the leftmost child with no left child),
